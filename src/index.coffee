@@ -38,12 +38,11 @@ _ =
 # State Machine
 class StateMachine extends Events
   # -- Private --
-  _getState: -> @_state ? null
   _setState: (next) ->
     unless next?
       return @_throw "Invalid state '#{ next }'"
 
-    current = @_getState()
+    current = @getState()
     @_state = next+''
     @trigger 'state:change', current, next
 
@@ -70,7 +69,7 @@ class StateMachine extends Events
 
   _triggerEvent: (event) ->
     # Get current state and find out if event allowed
-    current = @_getState()
+    current = @getState()
     next = @_blueprint[current]?[event]
 
     # Set next state
@@ -102,6 +101,9 @@ class StateMachine extends Events
 
     # Start
     @_setState states[0].state if states[0]
+
+  # Get surrent state
+  getState: -> @_state ? null
 
   # Override trigger to run machine events
   trigger: (event, args...) ->
