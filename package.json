@@ -1,6 +1,6 @@
 {
   "name": "co-states",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Coroutine based state machine.",
   "main": "lib/index.js",
   "scripts": {
