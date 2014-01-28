@@ -35,85 +35,88 @@ _ =
     dest[k] = v for own k, v of src
     dest
 
-# State Machine
-class StateMachine extends Events
-  # -- Private --
-  _setState: (next) ->
-    unless next?
-      return @_throw "Invalid state '#{ next }'"
-
-    current = @getState()
-    @_state = next+''
-    @trigger 'state:change', current, next
-
-    next
-
-  _throw: (error) ->
-    error = new Error error
-    @trigger 'error', error
-    error
-
-  _addStates: (states) ->
-    # Add to blueprint
-    for {state, events} in states
-      @_blueprint[state] = events
-
-    # Add events to machine
-    for event in _.uniq _.flatten (_.pluck states, 'events').map Object.keys
-      this[event] = do =>
-        e = event
-
-        return =>
-          @_triggerEvent e
-          this
-
-  _triggerEvent: (event) ->
-    # Get current state and find out if event allowed
-    current = @getState()
-    next = @_blueprint[current]?[event]
-
-    # Set next state
-    if next?
-      @_setState next
-
-    else
-      @_throw "Invalid event '#{ event }' for current state '#{ current }'"
-      false
-
-  # -- Public --
-  constructor: (states) ->
-    # List of states and events to initialize machine
-    # Ex: [
-    #   {
-    #     state: 'blah',
-    #     events: {
-    #       'someEvent': 'newState'
-    #     }
-    #   },
-    #   { ... }
-    # ]
-
-    super
-
-    # Add events for corresponding states
-    @_blueprint = {}
-    @_addStates states
-
-    # Start
-    @_setState states[0].state if states[0]
-
-  # Get surrent state
-  getState: -> @_state ? null
-
-  # Override trigger to run machine events
-  trigger: (event, args...) ->
-    if handler = this[event]?
-      handler.apply this, args
-
-    else
-      super event, args...
-
-    this
-
 # Exports
-module.exports = StateMachine
+module.exports = do ->
+  # Private vars
+  _state = ''
+  _blueprint = {}
+
+  # State Machine
+  class StateMachine extends Events
+    # -- Private --
+    _setState: (next) ->
+      unless next?
+        return @_throw "Invalid state '#{ next }'"
+
+      current = @getState()
+      _state = next+''
+      @trigger 'state:change', current, next
+
+      next
+
+    _throw: (error) ->
+      error = new Error error
+      @trigger 'error', error
+      error
+
+    _addStates: (states) ->
+      # Add to blueprint
+      for {state, events} in states
+        _blueprint[state] = events
+
+      # Add events to machine
+      for event in _.uniq _.flatten (_.pluck states, 'events').map Object.keys
+        this[event] = do =>
+          e = event
+
+          return =>
+            @_triggerEvent e
+            this
+
+    _triggerEvent: (event) ->
+      # Get current state and find out if event allowed
+      current = @getState()
+      next = _blueprint[current]?[event]
+
+      # Set next state
+      if next?
+        @_setState next
+
+      else
+        @_throw "Invalid event '#{ event }' for current state '#{ current }'"
+        false
+
+    # -- Public --
+    constructor: (states) ->
+      # List of states and events to initialize machine
+      # Ex: [
+      #   {
+      #     state: 'blah',
+      #     events: {
+      #       'someEvent': 'newState'
+      #     }
+      #   },
+      #   { ... }
+      # ]
+
+      super
+
+      # Add events for corresponding states
+      @_addStates states
+
+      # Start
+      @_setState states[0].state if states[0]
+
+    # Get surrent state
+    getState: -> _state ? null
+
+    # Override trigger to run machine events
+    trigger: (event, args...) ->
+      if handler = this[event]?
+        handler.apply this, args
+
+      else
+        super event, args...
+
+      this
+
