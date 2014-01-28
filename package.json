@@ -1,0 +1,37 @@
+{
+  "name": "co-states",
+  "version": "0.0.0",
+  "description": "Coroutine based state machine.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "./node_modules/coffee-script/bin/coffee -c test && ./node_modules/mocha/bin/mocha --harmony --bail --async-only --colors --ui exports --reporter spec",
+    "docs": "rm README.md && ./node_modules/coffee-script/bin/coffee -c test && ./node_modules/mocha/bin/mocha --harmony --bail --async-only --colors --ui exports --reporter markdown >> README.md",
+    "build": "./node_modules/coffee-script/bin/coffee -o lib -c src",
+    "watch": "./node_modules/coffee-script/bin/coffee -o lib -cw src",
+    "postinstall": "npm run-script build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/creatorrr/co-states.git"
+  },
+  "keywords": [
+    "co",
+    "state machine"
+  ],
+  "author": "diwank.singh@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/creatorrr/co-states/issues"
+  },
+  "devDependencies": {
+    "coffee-script": "git://github.com/alubbe/coffee-script.git#1e377ed59bc4f679863b7543f0c33d1f89dbf6ac",
+    "mocha": "~1.16.2"
+  },
+  "dependencies": {
+    "co": "~3.0.2",
+    "co-events": "~0.2.2"
+  },
+  "engines": {
+    "node": "0.11.x || 0.12.x"
+  }
+}
