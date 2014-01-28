@@ -28,7 +28,6 @@
     "mocha": "~1.16.2"
   },
   "dependencies": {
-    "co": "~3.0.2",
     "co-events": "~0.2.2"
   },
   "engines": {

@@ -1,5 +1,4 @@
 # Deps
-co = require 'co'
 Events = require 'co-events'
 
 # Utils
