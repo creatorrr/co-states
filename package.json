@@ -4,8 +4,8 @@
   "description": "Coroutine based state machine.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "./node_modules/coffee-script/bin/coffee -c test && ./node_modules/mocha/bin/mocha --harmony --bail --async-only --colors --ui exports --reporter spec",
-    "docs": "rm README.md && ./node_modules/coffee-script/bin/coffee -c test && ./node_modules/mocha/bin/mocha --harmony --bail --async-only --colors --ui exports --reporter markdown >> README.md",
+    "test": "./node_modules/coffee-script/bin/coffee -c test && ./node_modules/mocha/bin/mocha --harmony --bail --colors --ui exports --reporter spec",
+    "docs": "rm README.md && ./node_modules/coffee-script/bin/coffee -c test && ./node_modules/mocha/bin/mocha --harmony --bail --ui exports --reporter markdown >> README.md",
     "build": "./node_modules/coffee-script/bin/coffee -o lib -c src",
     "watch": "./node_modules/coffee-script/bin/coffee -o lib -cw src",
     "postinstall": "npm run-script build"
