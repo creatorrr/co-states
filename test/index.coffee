@@ -66,9 +66,9 @@ module.exports =
       the blueprint': (callback) ->
 
         ###
-        A 'state:change' event is triggered on the state
-        machine when state is changed. The current state
-        and the next state are passed as extra parameters.
+          A 'state:change' event is triggered on the state
+          machine when state is changed. The current state
+          and the next state are passed as extra parameters.
         ###
 
         trafficLights.on 'state:change', (current, next) ->
@@ -91,3 +91,19 @@ module.exports =
 
         ### Trigger state change. ###
         trafficLights.trigger 'go'
+
+      'State machine will throw an error if an invalid event
+      is triggered.': (callback) ->
+
+        ###
+          An 'error' event is triggered when an invalid state
+          event is attempted. An <Error> object is passed
+          along with a helpful message.
+        ###
+
+        trafficLights.on 'error', (e) ->
+          callback assert e instanceof Error
+
+        ### Trigger invalid event 'stop' for state 'red'. ###
+        trafficLights.stop()
+
