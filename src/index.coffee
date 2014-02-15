@@ -111,7 +111,7 @@ module.exports = do ->
 
     # Override trigger to run machine events
     trigger: (event, args...) ->
-      if handler = this[event]?
+      if (handler = this[event])?
         handler.apply this, args
 
       else
