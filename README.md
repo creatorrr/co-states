@@ -61,9 +61,9 @@ These functions change the machine state according to the blueprint.
 
 ```js
 /*
-          A 'state:change' event is triggered on the state
-          machine when state is changed. The current state
-          and the next state are passed as extra parameters.
+            A 'state:change' event is triggered on the state
+            machine when state is changed. The current state
+            and the next state are passed as extra parameters.
            */
           trafficLights.on('state:change', function(current, next) {
             callback(assert.equal(next, 'green'));
@@ -74,7 +74,7 @@ These functions change the machine state according to the blueprint.
           return trafficLights.go();
 ```
 
-State can also be changed by triggering an event on the machine by the same name as the blueprint event..
+State can also be changed by triggering an event on the machine by the same name as the blueprint event.
 
 ```js
 trafficLights.on('state:change', function(current, next) {
@@ -84,5 +84,32 @@ trafficLights.on('state:change', function(current, next) {
 });
 /* Trigger state change. */
 return trafficLights.trigger('go');
+```
+
+State machine will throw an error if an invalid event is triggered.
+
+```js
+/*
+            An 'error' event is triggered when an invalid state
+            event is attempted. An <Error> object is passed
+            along with a helpful message.
+           */
+          trafficLights.on('error', function(e) {
+            return callback(assert(e instanceof Error));
+          });
+          /* Trigger invalid event 'stop' for state 'red'. */
+          return trafficLights.stop();
+```
+
+Co-states extends co-events so callbacks for events can be anything that co supports.
+
+```js
+/* Generators FTW! */
+          trafficLights.on('state:change', function*(__, next) {
+            return yield function() {
+              return callback(null);
+            };
+          });
+          return trafficLights.go();
 ```
 

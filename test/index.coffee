@@ -81,7 +81,7 @@ module.exports =
         trafficLights.go()
 
       'State can also be changed by triggering an event on
-      the machine by the same name as the blueprint event.': (callback) ->
+      the machine by the same name as the blueprint event': (callback) ->
 
         trafficLights.on 'state:change', (current, next) ->
           callback assert.equal next, 'green'
@@ -93,7 +93,7 @@ module.exports =
         trafficLights.trigger 'go'
 
       'State machine will throw an error if an invalid event
-      is triggered.': (callback) ->
+      is triggered': (callback) ->
 
         ###
           An 'error' event is triggered when an invalid state
@@ -107,3 +107,11 @@ module.exports =
         ### Trigger invalid event 'stop' for state 'red'. ###
         trafficLights.stop()
 
+      'Co-states extends co-events so callbacks for events can
+      be anything that co supports': (callback) ->
+
+        ### Generators FTW! ###
+        trafficLights.on 'state:change', (__, next) ->*
+          yield -> callback null
+
+        trafficLights.go()
